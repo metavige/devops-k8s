@@ -6,9 +6,6 @@ multipass launch -c $CPU -m $MEMORY -d $DISK -n $K3S_NODE --cloud-init ./ubuntu-
 
 multipass exec $K3S_NODE -- bash -c "curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE=644 sh -"
 
-# traefik ingress
-# /var/lib/rancher/k3s/server/manifests/traefik.yaml
-
 # bash
 # multipass exec $K3S_NODE sudo cat /etc/rancher/k3s/k3s.yaml > $KUBECONFIG
 # ZSH

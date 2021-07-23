@@ -2,4 +2,4 @@
 
 source .env
 
-multipass stop $K3S_NODE
+multipass start $K3S_NODE

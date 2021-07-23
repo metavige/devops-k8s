@@ -11,6 +11,6 @@ kubectl create configmap traefik-config \
   --from-file=ssl.yml=conf/ssl.yml \
   -n kube-system
 
-kubectl patch deployment traefik --patch "$(cat patch.yaml)" -n kube-system
+kubectl patch deployment traefik --type merge --patch "$(cat patch.yaml)" -n kube-system
 
 kubectl apply -f tls-options/ssl.yaml -n kube-system
