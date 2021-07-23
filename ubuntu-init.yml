@@ -1,14 +1,17 @@
 # 設定 DNS
-bootcmd:
-  - echo "[Resolve]\nDNS=8.8.8.8\nDNS=192.168.64.1\n" > /etc/systemd/resolved.conf
-  - [systemctl, restart, systemd-resolved]
+manage_resolv_conf: true
+resolv_conf:
+  nameservers: ['192.168.64.1', '8.8.8.8']
 # 使用台灣的 apt mirror
 apt:
   primary:
     - arches: [default]
       search:
         - http://free.nchc.org.tw/ubuntu/
-
+groups:
+  - ubuntu: [root, sys]
+package_update: true
+package_upgrade: true
 # 先將自己本機產生好的 public key 放進去，方便在本機直接 SSH 連線
 ssh_authorized_keys:
   - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBdcSBGvperONVDDhsjA/2cVMRTxXh05UvkLoZGO6QcH metavige@gmail.com
