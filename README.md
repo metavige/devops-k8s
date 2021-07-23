@@ -1,7 +1,7 @@
-# DevOps
+# Local Development for Kubernetes (k3s)
 
 - 嘗試用 kubernetes 來製作 local 開發測試相關的環境
-- 要複製 [devops-compose](https://github.com/metavige/devops-compose) 環境
+- 複製 [devops-compose](https://github.com/metavige/devops-compose) 環境
 
 ## Multipass
 
@@ -15,7 +15,7 @@
 
 ## k3s - Traefik
 
-- 預設會安裝一個 Klipper LB 的套件 : `rancher/klipper-lb:v0.2.0`
+- 預設會安裝一個 Klipper LB 的套件: `rancher/klipper-lb:v0.2.0`
 - 這個套件，會 bind 80/443 這兩個 port 在本機上  
   (會用 iptables 的方式轉換，以及 hostPort，讓封包轉到 kubernetes 內部)
 - traefik 預設不會將 9000 dashboard export 出來
