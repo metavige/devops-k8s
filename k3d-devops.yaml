@@ -1,0 +1,21 @@
+---
+apiVersion: k3d.io/v1alpha2
+kind: Simple
+name: $CLUSTER_NAME
+servers: 1
+agents: 3
+# image: docker.io/rancher/k3s:v1.21.2-k3s1
+ports:
+  - port: 80:80 # same as `--port '80:80@loadbalancer'`
+    nodeFilters:
+      - loadbalancer
+  - port: 443:443 # same as `--port '443:443@loadbalancer'`
+    nodeFilters:
+      - loadbalancer
+## 20210816 先不使用 registries，之後再來研究
+# registries: # define how registries should be created or used
+#   create: true # creates a default registry to be used with the cluster; same as `--registry-create`
+options:
+  k3s: # options passed on to K3s itself
+    extraServerArgs: # additional arguments passed to the `k3s server` command; same as `--k3s-server-arg`
+      - --disable=traefik
