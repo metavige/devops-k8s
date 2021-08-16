@@ -1,15 +1,16 @@
-# dashboard.yaml
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: traefik-dashboard
-  namespace: kube-system
 spec:
   entryPoints:
+    - web
     - websecure
   routes:
-    - match: Host(`traefik.k8s.internal`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))
-      kind: Rule
+    - kind: Rule
+      match: Host(`traefik.k8s.internal`)
       services:
         - name: api@internal
           kind: TraefikService
+      middlewares:
+        - name: secured@file
