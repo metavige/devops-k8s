@@ -1,18 +1,18 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: gitea
+  name: nexus3
   labels:
-    app: gitea
+    app: nexus3
 spec:
   entryPoints:
     - web
     - websecure
   routes:
     - kind: Rule
-      match: Host(`gitea.k8s.internal`)
+      match: Host(`nexus.k8s.internal`)
       services:
-        - name: gitea-http
-          port: 3000
+        - name: nexus3
+          port: 8081
       middlewares:
         - name: secured@file
