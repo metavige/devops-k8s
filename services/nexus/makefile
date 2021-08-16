@@ -7,3 +7,9 @@ start:
 stop:
 	helm uninstall ${RELEASE_NAME}
 	kubectl delete -f ingress-route.yaml
+
+pause:
+	kubectl scale deployment.apps/nexus3 --replicas=0
+
+resume:
+	kubectl scale deployment.apps/nexus3 --replicas=1
