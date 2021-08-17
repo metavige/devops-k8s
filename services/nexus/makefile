@@ -1,7 +1,8 @@
+HELM_CHART=stevehipwell/nexus3
 RELEASE_NAME=nexus3
 
 start:
-	helm upgrade --install -n default ${RELEASE_NAME} stevehipwell/nexus3
+	helm upgrade --install ${RELEASE_NAME} ${HELM_CHART} -f nexus-values.yaml
 	kubectl apply -f ingress-route.yaml
 
 stop:

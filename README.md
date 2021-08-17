@@ -17,5 +17,13 @@
 ## Traefik
 
 - 先使用 `mkcert` 建立 `*.k8s.internal` 的憑證，放置在 `traefik/certs` 目錄下
-- 透過 Helm 安裝 traefik, 可以使用 `traefik/traefik-init.sh` 的指令啟動
+- 透過 Helm 安裝 traefik, 可以使用 `base/traefik/traefik-init.sh` 的指令啟動
 - 如果需要測試，可以將 `traefik/whoami.yaml` 加入 k8s
+
+## Helm
+
+- 搜尋網站: https://artifacthub.io/
+
+## Storage
+
+- Server 可以掛載 `/var/lib/rancher/k3s/storage/`

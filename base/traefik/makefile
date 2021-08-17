@@ -1,3 +1,6 @@
+
+.PHONY: start stop config
+
 start:
 	sh ./traefik-init.sh
 
