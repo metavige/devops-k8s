@@ -1,7 +1,7 @@
 include .env
 
 start:
-	sh ./init.sh
+	k3d cluster create -c k3d-devops.yaml
 
 stop:
 	k3d cluster delete ${CLUSTER_NAME}

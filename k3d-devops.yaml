@@ -3,8 +3,8 @@ apiVersion: k3d.io/v1alpha2
 kind: Simple
 name: $CLUSTER_NAME
 network: $K3D_NETWORK
-servers: 1
-agents: 3
+servers: $SERVER_NODES
+agents: $AGENT_NODES
 # image: docker.io/rancher/k3s:v1.21.2-k3s1
 ports:
   - port: 80:80 # same as `--port '80:80@loadbalancer'`

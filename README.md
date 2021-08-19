@@ -6,13 +6,31 @@
   - 這組開發環境，FQDN 為 `*.k8s.internal`
   - 透過 `/etc/resolver` 來重導 FQDN 到 multipass 去
     - 增加 `/etc/resolver/k8s.internal` 檔案，內容為 `nameserver 127.0.0.1`
-    - 使用 `dnsmasq`，增加 `address=/k8s.internal/127.0.0.2`
+    - 使用 `dnsmasq`，增加 `address=/k8s.internal/127.0.0.1`
   - 重啟 `dnsmasq` 服務
 
 ## k3d
 
 - 參考 https://k3d.io
-- 透過 `init.sh` 初始化 k3d 環境
+- 啟用簡單的指令
+
+```shell
+$ source .env
+$ k3d cluster create ${CLUSTER_NAME} \
+    -p 80:80@loadbalancer \
+    -p 443:443@loadbalancer \
+    --network ${K3D_NETWORK} \
+    --servers ${SERVER_NODES} \
+    --agents ${AGENT_NODES} \
+    --k3s-server-arg "--disable=traefik"
+```
+
+- 也可以用 config 設定 ('k3d-devops.yaml`)
+
+```shell
+$ source .env
+$ k3d cluster create -c k3d-devops.yaml
+```
 
 ## Traefik
 
