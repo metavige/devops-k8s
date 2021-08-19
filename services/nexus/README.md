@@ -5,6 +5,22 @@
 
 ```shell
 helm repo add stevehipwell https://stevehipwell.github.io/helm-charts/
+helm upgrade --install nexus3 stevehipwell/nexus3 -f nexus-values.yaml
+```
+
+```yaml
+persistence:
+  enabled: true
+service:
+  additionalPorts:
+    - port: 5000
+      name: docker-group
+      containerPort: 5000
+      host: nexus.k8s.internal
+config:
+  rootPassword:
+    secret: nexus-secret
+    key: password
 ```
 
 ### TODO

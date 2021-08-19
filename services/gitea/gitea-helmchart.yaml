@@ -1,0 +1,42 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: gitea
+spec:
+  chart: gitea-charts/gitea
+  valuesContent: |-
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+    persistence:
+      enabled: true
+      size: 1Gi
+      accessModes:
+        - ReadWriteOnce
+    postgresql:
+      persistence:
+        size: 1Gi
+    gitea:
+      admin:
+        username: gitea
+        password: gitea
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: gitea
+  labels:
+    app: gitea
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`git.k8s.internal`)
+      services:
+        - name: gitea-http
+          port: 3000
+      middlewares:
+        - name: secured@file

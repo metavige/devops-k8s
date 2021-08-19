@@ -1,13 +1,10 @@
-HELM_CHART=gitea-charts/gitea
-RELEASE_NAME=gitea
-
 start:
-	helm upgrade --install ${RELEASE_NAME} ${HELM_CHART} -f gitea-values.yaml
-	kubectl apply -f ./ingress-route.yaml
+# helm upgrade --install ${RELEASE_NAME} ${HELM_CHART} -f gitea-values.yaml
+	kubectl apply -f ./gitea-helmchart.yaml
 
 stop:
-	helm uninstall ${RELEASE_NAME}
-	kubectl delete -f ./ingress-route.yaml
+# 	helm uninstall ${RELEASE_NAME}
+	kubectl delete -f ./gitea-helmchart.yaml
 
 pause:
 	kubectl scale --replicas=0 statefulset.apps/gitea

@@ -1,0 +1,18 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: traefik
+spec:
+  chart: traefik/traefik
+  targetNamespace: kube-system
+  valuesContent: |-
+    additionalArguments:
+      - '--providers.file.directory=/etc/traefik/dynamic_conf'
+      - '--entrypoints.websecure.http.tls=true'
+    volumes:
+      - name: traefik-certs
+        mountPath: '/certs'
+        type: secret
+      - name: traefik-config
+        mountPath: '/etc/traefik/dynamic_conf'
+        type: configMap

@@ -2,12 +2,10 @@ HELM_CHART=stevehipwell/nexus3
 RELEASE_NAME=nexus3
 
 start:
-	helm upgrade --install ${RELEASE_NAME} ${HELM_CHART} -f nexus-values.yaml
-	kubectl apply -f ingress-route.yaml
+	kubectl apply -f nexus-helmchart.yaml
 
 stop:
-	helm uninstall ${RELEASE_NAME}
-	kubectl delete -f ingress-route.yaml
+	kubectl delete -f nexus-helmchart.yaml
 
 pause:
 	kubectl scale deployment.apps/nexus3 --replicas=0

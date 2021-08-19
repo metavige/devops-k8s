@@ -2,11 +2,10 @@
 .PHONY: start stop config
 
 start:
-	sh ./traefik-init.sh
+	kubectl apply -f config/*.yaml -n kube-system
 
 stop:
-	helm uninstall traefik
-	kubectl delete IngressRoute/traefik-dashboard -n kube-system
+	kubectl delete -f config/*.yaml -n kube-system
 
 whoami:
 	kubectl apply -f whoami.yaml
