@@ -2,6 +2,7 @@
 apiVersion: k3d.io/v1alpha2
 kind: Simple
 name: $CLUSTER_NAME
+network: $K3D_NETWORK
 servers: 1
 agents: 3
 # image: docker.io/rancher/k3s:v1.21.2-k3s1
@@ -15,6 +16,14 @@ ports:
 ## 20210816 先不使用 registries，之後再來研究
 # registries: # define how registries should be created or used
 #   create: true # creates a default registry to be used with the cluster; same as `--registry-create`
+#   use:
+#     - k3d-registry:5000 # some other k3d-managed registry; same as `--registry-use 'k3d-myotherregistry:5000'`
+#   config:
+#     | # define contents of the `registries.yaml` file (or reference a file); same as `--registry-config /path/to/config.yaml`
+#     mirrors:
+#       "*":
+#         endpoint:
+#           - http://k3d-registry:5000
 options:
   k3s: # options passed on to K3s itself
     extraServerArgs: # additional arguments passed to the `k3s server` command; same as `--k3s-server-arg`

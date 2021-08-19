@@ -11,4 +11,4 @@ kubectl create configmap traefik-config \
 
 helm install traefik traefik/traefik -n kube-system -f traefik-values.yaml
 
-kubectl replace -f traefik-dashboard.yaml -n kube-system
+kubectl apply -f traefik-dashboard.yaml -n kube-system

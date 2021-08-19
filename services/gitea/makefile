@@ -3,7 +3,7 @@ RELEASE_NAME=gitea
 
 start:
 	helm upgrade --install ${RELEASE_NAME} ${HELM_CHART} -f gitea-values.yaml
-	kubectl replace -f ./ingress-route.yaml
+	kubectl apply -f ./ingress-route.yaml
 
 stop:
 	helm uninstall ${RELEASE_NAME}
