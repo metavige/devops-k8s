@@ -17,5 +17,5 @@ status:
 
 traefik:
 	cd base/traefik && \
-	sh ./traefik-init.sh && \
+	kubectl apply -k config -n kube-system && \
 	cd ${OLDPWD}

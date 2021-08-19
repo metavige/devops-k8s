@@ -1,0 +1,12 @@
+commonLabels:
+  app: traefik
+secretGenerator:
+  - name: traefik-certs
+    type: 'kubernetes.io/tls'
+    files:
+      - tls.key=certs/_wildcard.k8s.internal-key.pem
+      - tls.crt=certs/_wildcard.k8s.internal.pem
+resources:
+  - traefik-config.yaml
+  - traefik-helmchart.yaml
+  # - traefik-dashboard.yaml

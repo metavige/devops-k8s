@@ -2,10 +2,10 @@
 .PHONY: start stop config
 
 start:
-	kubectl apply -f config/*.yaml -n kube-system
+	kubectl apply -k config -n kube-system
 
 stop:
-	kubectl delete -f config/*.yaml -n kube-system
+	kubectl delete -l app=traefik -n kube-system
 
 whoami:
 	kubectl apply -f whoami.yaml
