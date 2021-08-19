@@ -10,9 +10,9 @@ spec:
       - '--providers.file.directory=/etc/traefik/dynamic_conf'
       - '--entrypoints.websecure.http.tls=true'
     volumes:
-      - name: traefik-certs
+      - name: $(TRAEFIK_SECRET_NAME)
         mountPath: '/certs'
         type: secret
-      - name: traefik-config
+      - name: $(TRAEFIK_CONFIG_NAME)
         mountPath: '/etc/traefik/dynamic_conf'
         type: configMap

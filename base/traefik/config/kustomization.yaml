@@ -1,3 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - traefik-helmchart.yaml
+  # - traefik-config.yaml
+  # - traefik-dashboard.yaml
+
 commonLabels:
   app: traefik
 secretGenerator:
@@ -6,7 +14,24 @@ secretGenerator:
     files:
       - tls.key=certs/_wildcard.k8s.internal-key.pem
       - tls.crt=certs/_wildcard.k8s.internal.pem
-resources:
-  - traefik-config.yaml
-  - traefik-helmchart.yaml
-  # - traefik-dashboard.yaml
+configMapGenerator:
+  - name: traefik-config
+    files:
+      - ssl.yml=conf/ssl.yml
+vars:
+  - name: TRAEFIK_CONFIG_NAME
+    objref:
+      kind: ConfigMap
+      name: traefik-config
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name
+  - name: TRAEFIK_SECRET_NAME
+    objref:
+      kind: Secret
+      name: traefik-certs
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name
+configurations:
+  - transformer_config.yaml

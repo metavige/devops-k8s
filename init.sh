@@ -10,6 +10,8 @@ k3d cluster create ${CLUSTER_NAME} \
   --agents ${AGENT_NODES} \
   --k3s-server-arg "--disable=traefik"
 
+helm repo update
+
 # Optional
 # --api-port 0.0.0.0:6443 \
 # --agents-memory 1g \
