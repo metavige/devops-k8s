@@ -2,25 +2,37 @@
 
 source .env
 
+## Make Traefik Configuration
+
+TRAEFIK_CONF_DIR=${PWD}/base/traefik/config
+K3S_MANIFETSS_DIR=${PWD}/volumes/manifests
+
+if [ ! -f ${K3S_MANIFETSS_DIR}/traefik-secret.yaml ]; then
+  if [ ! -f ${TRAEFIK_CONF_DIR}/certs/_wildcard.k8s.internal-key.pem ]; then
+    cd ${TRAEFIK_CONF_DIR}/certs &&
+      mkcert '*.k8s.internal' &&
+      cd ${OLDPWD}
+  fi
+
+  kubectl create secret tls traefik-certs \
+    --cert=${PWD}/base/traefik/config/certs/_wildcard.k8s.internal.pem \
+    --key=${PWD}/base/traefik/config/certs/_wildcard.k8s.internal-key.pem \
+    -n kube-system --dry-run=client -o yaml \
+    >${K3S_MANIFETSS_DIR}/traefik-secret.yaml
+fi
+
+if [ ! -f ${K3S_MANIFETSS_DIR}/traefik-configmap.yaml ]; then
+  kubectl create configmap traefik-config \
+    --from-file=ssl.yml=config/conf/ssl.yml \
+    -n kube-system --dry-run=client -o yaml \
+    >${K3S_MANIFETSS_DIR}/traefik-configmap.yaml
+fi
+
 k3d cluster create ${CLUSTER_NAME} \
   -p 80:80@loadbalancer \
   -p 443:443@loadbalancer \
   --network ${K3D_NETWORK} \
   --servers ${SERVER_NODES} \
   --agents ${AGENT_NODES} \
-  --k3s-server-arg "--disable=traefik"
-
-helm repo update
-
-# Optional
-# --api-port 0.0.0.0:6443 \
-# --agents-memory 1g \
-# --registry-create \
-
-# 另外一種建立 k3d 的方式
-# k3d cluster create -c k3d-devops.yaml
-
-# cd base/traefik
-# sh ./traefik-init.sh
-
-# cd $OLDPWD
+  --registry-config registry-config.yaml \
+  --volume ${K3S_MANIFETSS_DIR}:/var/lib/rancher/k3s/server/manifests

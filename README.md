@@ -12,20 +12,11 @@
 ## k3d
 
 - 參考 https://k3d.io
-- 啟用簡單的指令
-
-```shell
-$ source .env
-$ k3d cluster create ${CLUSTER_NAME} \
-    -p 80:80@loadbalancer \
-    -p 443:443@loadbalancer \
-    --network ${K3D_NETWORK} \
-    --servers ${SERVER_NODES} \
-    --agents ${AGENT_NODES} \
-    --k3s-server-arg "--disable=traefik"
-```
+- 啟用簡單的指令，參考 `init.sh`
 
 - 也可以用 config 設定 ('k3d-devops.yaml`)
+
+> 這個方式，無法使用 `.env` 檔案內的 `SERVER_NODES`, `AGENT_NODES` 數字
 
 ```shell
 $ source .env
@@ -34,8 +25,9 @@ $ k3d cluster create -c k3d-devops.yaml
 
 ## Traefik
 
-- 先使用 `mkcert` 建立 `*.k8s.internal` 的憑證，放置在 `traefik/certs` 目錄下
-- 透過 Helm 安裝 traefik, 可以使用 `base/traefik/traefik-init.sh` 的指令啟動
+- 先使用 `mkcert` 建立 `*.k8s.internal` 的憑證
+- 將憑證轉換成 `secret` 物件，並且將設定檔放入 `volumes/manifests/` 目錄下
+- 產生 `HelmChartConfig`，將要客製化的設定放入
 - 如果需要測試，可以將 `traefik/whoami.yaml` 加入 k8s
 
 ## Helm

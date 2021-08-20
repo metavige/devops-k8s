@@ -1,0 +1,15 @@
+version: '3'
+services:
+  registry:
+    hostname: k3d-${CLUSTER_NAME}-registry
+    image: registry:2
+    volumes:
+      - registry-blob:/var/lib/registry
+
+volumes:
+  registry-blob: {}
+
+networks:
+  default:
+    external: true
+    name: k3d-${CLUSTER_NAME}

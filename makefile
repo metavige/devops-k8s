@@ -1,15 +1,15 @@
 include .env
 
-start:
+init:
 	sh ./init.sh
 
-stop:
+destroy:
 	k3d cluster delete ${CLUSTER_NAME}
 
-pause:
+stop:
 	k3d cluster stop ${CLUSTER_NAME}
 
-resume:
+start:
 	k3d cluster start ${CLUSTER_NAME}
 
 status:
