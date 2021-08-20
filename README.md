@@ -23,6 +23,8 @@ $ source .env
 $ k3d cluster create -c k3d-devops.yaml
 ```
 
+- 有搭配 [devops-compose](https://github.com/metavige/devops-compose) 內的 nexus 服務，方便離線處理 docker images
+
 ## Traefik
 
 - 先使用 `mkcert` 建立 `*.k8s.internal` 的憑證

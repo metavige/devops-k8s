@@ -1,4 +1,4 @@
 mirrors:
   'docker.io':
     endpoint:
-      - http://devops-k8s_registry_1:5000
+      - http://nexus.docker.internal

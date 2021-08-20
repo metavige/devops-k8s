@@ -14,18 +14,16 @@ if [ ! -f ${K3S_MANIFETSS_DIR}/traefik-secret.yaml ]; then
       cd ${OLDPWD}
   fi
 
-  kubectl create secret tls traefik-certs \
-    --cert=${PWD}/base/traefik/config/certs/_wildcard.k8s.internal.pem \
-    --key=${PWD}/base/traefik/config/certs/_wildcard.k8s.internal-key.pem \
-    -n kube-system --dry-run=client -o yaml \
-    >${K3S_MANIFETSS_DIR}/traefik-secret.yaml
+  kubectl create secret tls traefik-secret \
+    --cert=${TRAEFIK_CONF_DIR}/certs/_wildcard.k8s.internal.pem \
+    --key=${TRAEFIK_CONF_DIR}/certs/_wildcard.k8s.internal-key.pem \
+    -n kube-system --dry-run=client -o yaml >${K3S_MANIFETSS_DIR}/traefik-secret.yaml
 fi
 
 if [ ! -f ${K3S_MANIFETSS_DIR}/traefik-configmap.yaml ]; then
   kubectl create configmap traefik-config \
-    --from-file=ssl.yml=config/conf/ssl.yml \
-    -n kube-system --dry-run=client -o yaml \
-    >${K3S_MANIFETSS_DIR}/traefik-configmap.yaml
+    --from-file=ssl.yml=${TRAEFIK_CONF_DIR}/conf/ssl.yml \
+    -n kube-system --dry-run=client -o yaml >${K3S_MANIFETSS_DIR}/traefik-configmap.yaml
 fi
 
 k3d cluster create ${CLUSTER_NAME} \
@@ -35,4 +33,4 @@ k3d cluster create ${CLUSTER_NAME} \
   --servers ${SERVER_NODES} \
   --agents ${AGENT_NODES} \
   --registry-config registry-config.yaml \
-  --volume ${K3S_MANIFETSS_DIR}:/var/lib/rancher/k3s/server/manifests
+  --volume ${K3S_MANIFETSS_DIR}:/var/lib/rancher/k3s/server/manifests@server[0]

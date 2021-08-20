@@ -3,8 +3,8 @@ services:
   registry:
     hostname: k3d-${CLUSTER_NAME}-registry
     image: registry:2
-    volumes:
-      - registry-blob:/var/lib/registry
+    # volumes:
+    #   - registry-blob:/var/lib/registry
 
 volumes:
   registry-blob: {}
