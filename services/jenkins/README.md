@@ -1,0 +1,2 @@
+- repo: https://charts.jenkins.io
+- chart: jenkins

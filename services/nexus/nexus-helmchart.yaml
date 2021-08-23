@@ -10,7 +10,8 @@ kind: HelmChart
 metadata:
   name: nexus
 spec:
-  chart: stevehipwell/nexus3
+  repo: https://stevehipwell.github.io/helm-charts/
+  chart: nexus3
   valuesContent: |-
     persistence:
       enabled: true

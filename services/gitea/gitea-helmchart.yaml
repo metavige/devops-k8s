@@ -3,7 +3,8 @@ kind: HelmChart
 metadata:
   name: gitea
 spec:
-  chart: gitea-charts/gitea
+  repo: https://dl.gitea.io/charts/
+  chart: gitea
   valuesContent: |-
     resources:
       limits:

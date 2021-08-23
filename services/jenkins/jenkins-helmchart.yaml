@@ -1,0 +1,26 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: jenkins
+spec:
+  repo: https://charts.jenkins.io
+  chart: jenkins
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: jenkins
+  labels:
+    app: jenkins
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`jenkins.k8s.internal`)
+      services:
+        - name: jenkins
+          port: 8080
+      middlewares:
+        - name: secured@file
