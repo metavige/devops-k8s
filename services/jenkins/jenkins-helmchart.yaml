@@ -1,15 +1,37 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jenkins
+spec: {}
+---
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
   name: jenkins
+  namespace: jenkins
+  labels:
+    app: jenkins
 spec:
   repo: https://charts.jenkins.io
   chart: jenkins
+  valuesContent: |-
+    controller:
+      tag: lts-jdk11
+      jenkinsUrl: jenkins.k8s.internal
+      installPlugins:
+        - kubernetes:1.30.1
+        - workflow-aggregator:2.6
+        - git:4.8.2
+        - configuration-as-code:1.52
+        - workflow-cps:2.93
+        - docker-workflow:1.26
+        - pipeline-model-definition:1.9.1
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: jenkins
+  namespace: jenkins
   labels:
     app: jenkins
 spec:
