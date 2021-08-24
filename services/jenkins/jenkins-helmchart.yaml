@@ -27,6 +27,10 @@ spec:
         - docker-workflow:1.26
         - pipeline-model-api:1.9.1
         - pipeline-model-definition:1.9.1
+        - matrix-project:1.19
+        - junit:1.52
+        - lockable-resources:2.11
+
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
