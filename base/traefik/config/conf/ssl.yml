@@ -5,10 +5,21 @@ http:
       chain:
         middlewares:
           - https-only
+          - forwareder-headers
 
     https-only:
       redirectScheme:
         scheme: https
+
+    forwareder-headers:
+      headers:
+        hostsProxyHeaders: ["X-Forwarded-For", "X-Forwarded-Host"]
+
+    xss-headers:
+      headers:
+        contentTypeNosniff: true
+        browserXssFilter: true
+        contentSecurityPolicy: "default-src 'self'; script-src 'self'"
 
 tls:
   certificates:

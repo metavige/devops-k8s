@@ -2,6 +2,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: traefik-dashboard
+  namespace: kube-system
 spec:
   entryPoints:
     - web
@@ -12,5 +13,3 @@ spec:
       services:
         - name: api@internal
           kind: TraefikService
-      middlewares:
-        - name: secured@file

@@ -25,6 +25,7 @@ spec:
         - configuration-as-code:1.52
         - workflow-cps:2.93
         - docker-workflow:1.26
+        - pipeline-model-api:1.9.1
         - pipeline-model-definition:1.9.1
 ---
 apiVersion: traefik.containo.us/v1alpha1

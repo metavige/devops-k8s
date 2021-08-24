@@ -53,3 +53,4 @@ spec:
           port: 80
       middlewares:
         - name: secured@file
+        - name: xss-headers@file
