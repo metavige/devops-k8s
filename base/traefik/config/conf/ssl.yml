@@ -1,6 +1,6 @@
-# Redirect to https
 http:
   middlewares:
+    # Redirect to https
     secured:
       chain:
         middlewares:
@@ -21,6 +21,7 @@ http:
         browserXssFilter: true
         contentSecurityPolicy: "default-src 'self'; script-src 'self'"
 
+# setup customize ssl certificated
 tls:
   certificates:
     - certFile: /certs/tls.crt
