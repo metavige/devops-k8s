@@ -7,7 +7,7 @@ spec:
   - port: 80
     name: web
   type: ExternalName
-  externalName: "$(NEXUS_IP)"
+  externalName: nexus.docker.internal
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute

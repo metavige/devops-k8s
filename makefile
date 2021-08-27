@@ -4,7 +4,7 @@ init:
 	sh ./init.sh
 
 destroy:
-	k3d cluster delete ${CLUSTER_NAME} && sleep 2 && rm -rf ${K3S_MANIFESTS_DIR}
+	k3d cluster delete ${CLUSTER_NAME} && rm -rf ${K3S_MANIFESTS_DIR}
 
 stop:
 	k3d cluster stop ${CLUSTER_NAME}

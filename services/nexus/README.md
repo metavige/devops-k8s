@@ -34,3 +34,5 @@ config:
 ```shell
 NEXUS_IP=`docker inspect nexus_nginx_1 -f '{{.NetworkSettings.Networks.devops.IPAddress}}'`
 ```
+
+- 把這個設定加入到 coredns 的 configmap 設定

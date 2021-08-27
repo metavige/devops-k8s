@@ -25,7 +25,3 @@ k3d cluster create ${CLUSTER_NAME} \
   --agents ${AGENT_NODES} \
   --registry-config registry-config.yaml \
   --volume ${K3S_MANIFESTS_DIR}:/var/lib/rancher/k3s/server/manifests@server[0]
-
-sleep 3
-
-find ${K3S_MANIFESTS_DIR} -name '*.yaml' | xargs touch
