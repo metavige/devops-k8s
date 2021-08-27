@@ -1,0 +1,41 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: xss-headers
+  namespace: kube-system
+spec:
+  headers:
+    contentTypeNosniff: true
+    browserXssFilter: true
+    contentSecurityPolicy: "default-src 'self'; script-src 'self'"
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: forwareder-headers
+  namespace: kube-system
+spec:
+  headers:
+    hostsProxyHeaders: ["X-Forwarded-For", "X-Forwarded-Host"]
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: https-only
+  namespace: kube-system
+spec:
+  redirectScheme:
+    scheme: https
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: secured
+  namespace: kube-system
+spec:
+  chain:
+    middlewares:
+      - name: https-only
+        namespace: kube-system
+      - name: forwareder-headers
+        namespace: kube-system

@@ -51,5 +51,7 @@ spec:
         - name: whoami
           port: 80
       middlewares:
-        - name: secured@file
-        - name: xss-headers@file
+        - name: secured
+          namespace: kube-system
+        - name: xss-headers
+          namespace: kube-system

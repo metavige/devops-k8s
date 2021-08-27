@@ -43,4 +43,5 @@ spec:
         - name: nexus3
           port: 8081
       middlewares:
-        - name: secured@file
+        - name: secured
+          namespace: kube-system

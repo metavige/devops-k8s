@@ -18,10 +18,6 @@ kubectl create secret tls traefik-secret \
   --key=${TRAEFIK_CONF_DIR}/certs/_wildcard.k8s.internal-key.pem \
   -n kube-system --dry-run=client -o yaml >${K3S_MANIFESTS_DIR}/traefik-secret.yaml
 
-kubectl create configmap traefik-config \
-  --from-file=ssl.yml=${TRAEFIK_CONF_DIR}/conf/ssl.yml \
-  -n kube-system --dry-run=client -o yaml >${K3S_MANIFESTS_DIR}/traefik-configmap.yaml
-
 k3d cluster create ${CLUSTER_NAME} \
   -p 80:80@loadbalancer \
   -p 443:443@loadbalancer \
