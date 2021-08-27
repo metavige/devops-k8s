@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nexus-external
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    name: web
+  type: ExternalName
+  externalName: ${NEXUS_IP}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  labels:
+    app: nexus3
+  name: nexus3
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`nexus.k8s.internal`)
+      services:
+        - name: nexus-external
+          port: 80

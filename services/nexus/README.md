@@ -29,3 +29,11 @@ config:
 - 但是，之前 docker-compose 部分，自己有實作 docker request over nginx 的部分，看是否有機會實作出來
   - https://github.com/metavige/devops-compose/tree/master/nexus
 - Persistence 設定
+
+## redirect to docker 
+
+- 改直接連線到 docker 的服務 
+
+```shell
+NEXUS_IP=`docker inspect nexus_nginx_1 -f '{{.NetworkSettings.Networks.devops.IPAddress}}'`
+```

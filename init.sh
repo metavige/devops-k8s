@@ -4,8 +4,8 @@ source .env
 
 ## Make Traefik Configuration
 
-rm -rf ${K3S_MANIFETSS_DIR} && mkdir -p ${K3S_MANIFETSS_DIR}
-cp -f ${TRAEFIK_MANIFEST_DIR}/*.yaml ${K3S_MANIFETSS_DIR}
+rm -rf ${K3S_MANIFESTS_DIR} && mkdir -p ${K3S_MANIFESTS_DIR}
+cp -f ${TRAEFIK_MANIFESTS_DIR}/*.yaml ${K3S_MANIFESTS_DIR}
 
 if [ ! -f ${TRAEFIK_CONF_DIR}/certs/_wildcard.k8s.internal-key.pem ]; then
   cd ${TRAEFIK_CONF_DIR}/certs &&
@@ -16,11 +16,11 @@ fi
 kubectl create secret tls traefik-secret \
   --cert=${TRAEFIK_CONF_DIR}/certs/_wildcard.k8s.internal.pem \
   --key=${TRAEFIK_CONF_DIR}/certs/_wildcard.k8s.internal-key.pem \
-  -n kube-system --dry-run=client -o yaml >${K3S_MANIFETSS_DIR}/traefik-secret.yaml
+  -n kube-system --dry-run=client -o yaml >${K3S_MANIFESTS_DIR}/traefik-secret.yaml
 
 kubectl create configmap traefik-config \
   --from-file=ssl.yml=${TRAEFIK_CONF_DIR}/conf/ssl.yml \
-  -n kube-system --dry-run=client -o yaml >${K3S_MANIFETSS_DIR}/traefik-configmap.yaml
+  -n kube-system --dry-run=client -o yaml >${K3S_MANIFESTS_DIR}/traefik-configmap.yaml
 
 k3d cluster create ${CLUSTER_NAME} \
   -p 80:80@loadbalancer \
@@ -28,8 +28,8 @@ k3d cluster create ${CLUSTER_NAME} \
   --network ${K3D_NETWORK} \
   --agents ${AGENT_NODES} \
   --registry-config registry-config.yaml \
-  --volume ${K3S_MANIFETSS_DIR}:/var/lib/rancher/k3s/server/manifests@server[0]
+  --volume ${K3S_MANIFESTS_DIR}:/var/lib/rancher/k3s/server/manifests@server[0]
 
 sleep 3
 
-find ${K3S_MANIFETSS_DIR} -name '*.yaml' | xargs touch
+find ${K3S_MANIFESTS_DIR} -name '*.yaml' | xargs touch

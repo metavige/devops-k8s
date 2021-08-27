@@ -2,13 +2,16 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: redirect-https
+  name: traefik-redirect-https
+  namespace: kube-system
 spec:
   entryPoints:
     - web
   routes:
     - kind: Rule
       match: HostRegexp(`k8s.internal`, `{subdomain:.+}.k8s.internal`)
-      server: 
+      services:
+        - kind: TraefikService
+          name: noop@internal
       middlewares:
         - name: secured@file

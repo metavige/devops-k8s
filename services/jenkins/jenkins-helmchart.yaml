@@ -41,7 +41,6 @@ metadata:
     app: jenkins
 spec:
   entryPoints:
-    - web
     - websecure
   routes:
     - kind: Rule
@@ -49,5 +48,3 @@ spec:
       services:
         - name: jenkins
           port: 8080
-      middlewares:
-        - name: secured@file

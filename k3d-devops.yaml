@@ -15,6 +15,6 @@ registries: # define how registries should be created or used
   create: false # creates a default registry to be used with the cluster; same as `--registry-create`
   config: registry-config.yaml
 volumes:
-  - volume: ${PWD}/volumes/k3s/manifests:/var/lib/rancher/k3s/server/manifests
+  - volume: ${K3S_MANIFESTS_DIR}:/var/lib/rancher/k3s/server/manifests
     nodeFilters:
       - server[0]
