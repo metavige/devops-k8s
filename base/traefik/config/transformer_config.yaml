@@ -1,3 +1,0 @@
-varReference:
-  - kind: HelmChart
-    path: spec/valuesContent

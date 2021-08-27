@@ -39,3 +39,36 @@ $ k3d cluster create -c k3d-devops.yaml
 ## Storage
 
 - Server 可以掛載 `/var/lib/rancher/k3s/storage/`
+
+## PassThrough traefik on Docker
+
+- 本來嘗試想用同一個 docker traefik 然後做 passthrough
+- 可惜發現好像有問題，先不研究了～
+
+```shell
+AGENTS=""
+for i in $(seq 1 $AGENT_NODES); do
+  declare -i j=$i-1
+  test ! -z $AGENTS && AGENTS="$AGENTS,$j"
+  test -z $AGENTS && AGENTS="$j"
+  if [[ $AGENT_NODES -lt 2 ]]; then
+    break
+  fi
+done
+
+k3d cluster create ${CLUSTER_NAME} \
+  --no-lb \
+  --network ${K3D_NETWORK} \
+  --agents ${AGENT_NODES} \
+  --registry-config registry-config.yaml \
+  --volume ${K3S_MANIFETSS_DIR}:/var/lib/rancher/k3s/server/manifests@server[0] \
+  --label "traefik.enable=false@agent[${AGENTS}]" \
+  --label "traefik.enable=true@server[0]" \
+  --label "traefik.http.routers.k3d-https.tls.passthrough=true@server[0]" \
+  --label "traefik.http.routers.k3d-https.entrypoints=websecure@server[0]" \
+  --label "traefik.http.routers.k3d-https.rule=hostregexp(\"k8s.internal\", \"{subdomain:.+}.k8s.internal\")@server[0]" \
+  --label "traefik.http.services.k3d-https.loadbalancer.server.port=443@server[0]" \
+  --label "traefik.http.routers.k3d-http.entrypoints=web@server[0]" \
+  --label "traefik.http.routers.k3d-http.rule=hostregexp(\"k8s.internal\", \"{subdomain:.+}.k8s.internal\")@server[0]" \
+  --label "traefik.http.services.k3d-http.loadbalancer.server.port=80@server[0]"
+  ```

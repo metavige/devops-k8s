@@ -1,0 +1,14 @@
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: redirect-https
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: HostRegexp(`k8s.internal`, `{subdomain:.+}.k8s.internal`)
+      server: 
+      middlewares:
+        - name: secured@file

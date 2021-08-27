@@ -4,7 +4,6 @@ kind: Simple
 name: devops
 servers: 1
 agents: 1
-# image: docker.io/rancher/k3s:v1.21.2-k3s1
 ports:
   - port: 80:80 # same as `--port '80:80@loadbalancer'`
     nodeFilters:
@@ -13,9 +12,7 @@ ports:
     nodeFilters:
       - loadbalancer
 registries: # define how registries should be created or used
-  create: true # creates a default registry to be used with the cluster; same as `--registry-create`
-  # use:
-  #   - k3d-devops-registry:5000 # some other k3d-managed registry; same as `--registry-use 'k3d-myotherregistry:5000'`
+  create: false # creates a default registry to be used with the cluster; same as `--registry-create`
   config: registry-config.yaml
 volumes:
   - volume: ${PWD}/volumes/k3s/manifests:/var/lib/rancher/k3s/server/manifests

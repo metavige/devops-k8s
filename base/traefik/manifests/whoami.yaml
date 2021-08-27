@@ -43,7 +43,6 @@ metadata:
   name: traefik-whoami
 spec:
   entryPoints:
-    - web
     - websecure
   routes:
     - kind: Rule
