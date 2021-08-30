@@ -61,7 +61,7 @@ k3d cluster create ${CLUSTER_NAME} \
   --network ${K3D_NETWORK} \
   --agents ${AGENT_NODES} \
   --registry-config registry-config.yaml \
-  --volume ${K3S_MANIFETSS_DIR}:/var/lib/rancher/k3s/server/manifests@server[0] \
+  --volume ${K3S_MANIFESTS_DIR}:/var/lib/rancher/k3s/server/manifests@server[0] \
   --label "traefik.enable=false@agent[${AGENTS}]" \
   --label "traefik.enable=true@server[0]" \
   --label "traefik.http.routers.k3d-https.tls.passthrough=true@server[0]" \
