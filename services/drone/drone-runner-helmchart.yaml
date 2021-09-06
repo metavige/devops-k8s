@@ -1,0 +1,12 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: drone-runner
+spec:
+  repo: https://charts.drone.io
+  chart: drone-runner-kube
+  valuesContent: |-
+    extraSecretNamesForEnvFrom:
+      - gitea-oauth-secrets
+    env:
+      DRONE_RPC_PROTO: http
