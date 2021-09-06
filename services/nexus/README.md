@@ -26,6 +26,8 @@ config:
 ### TODO
 
 - [ ] 想方法取得 docker ip，設定給 yaml 使用
+- [ ] 修改 `init.sh`，讓這個動作可以自動話，不需要自行修改
+- [ ] 如果是第一次建立，還需要自行到內部去建立一個 docker proxy/group，並且 expose port 5000，才能使用
 
 ## redirect to docker
 
