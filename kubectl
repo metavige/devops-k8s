@@ -1,1 +1,0 @@
-patch cm/coredns -n kube-system --patch -
