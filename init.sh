@@ -28,3 +28,15 @@ k3d cluster create ${CLUSTER_NAME} \
   --registry-config registry-config.yaml \
   --volume "${K3S_MANIFESTS_DIR}:/var/lib/rancher/k3s/server/manifests@server[0]" \
   --volume "${K3S_VOLUME_DIR}/storages:/var/lib/rancher/k3s/storage/@all"
+
+# === test with docker-compose traefik (not yet) ===
+# --label "traefik.enable=false@server[0]" \
+# --label "traefik.enable=false@agent[${AGENTS}]" \
+# --label "traefik.enable=true@loadbalancer" \
+# --label "traefik.http.routers.k3d-https.tls.passthrough=true@loadbalancer" \
+# --label "traefik.http.routers.k3d-https.entrypoints=websecure@loadbalancer" \
+# --label "traefik.http.routers.k3d-https.rule=hostregexp(\"k8s.internal\", \"{subdomain:.+}.k8s.internal\")@loadbalancer" \
+# --label "traefik.http.services.k3d-https.loadbalancer.server.port=443@loadbalancer" \
+# --label "traefik.http.routers.k3d-http.entrypoints=web@loadbalancer" \
+# --label "traefik.http.routers.k3d-http.rule=hostregexp(\"k8s.internal\", \"{subdomain:.+}.k8s.internal\")@loadbalancer" \
+# --label "traefik.http.services.k3d-http.loadbalancer.server.port=80@loadbalancer"
