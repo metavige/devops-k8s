@@ -1,0 +1,11 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: gatekeeper
+  namespace: devops
+spec:
+  repo: https://charts.rancher.io
+  chart: rancher-gatekeeper
+  version: 3.3.001
+  valuesContent: |
+    constraintViolationsLimit: 600
