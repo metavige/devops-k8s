@@ -30,8 +30,6 @@ k3d cluster create ${CLUSTER_NAME} \
   --volume "${K3S_VOLUME_DIR}/storages:/var/lib/rancher/k3s/storage/@all"
 
 # === test with docker-compose traefik (not yet) ===
-# --label "traefik.enable=false@server[0]" \
-# --label "traefik.enable=false@agent[${AGENTS}]" \
 # --label "traefik.enable=true@loadbalancer" \
 # --label "traefik.http.routers.k3d-https.tls.passthrough=true@loadbalancer" \
 # --label "traefik.http.routers.k3d-https.entrypoints=websecure@loadbalancer" \

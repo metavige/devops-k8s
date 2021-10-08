@@ -32,3 +32,19 @@ $ k3d cluster create -c k3d-devops.yaml
 - 將憑證轉換成 `secret` 物件，並且將設定檔放入 `volumes/manifests/` 目錄下
 - 產生 `HelmChartConfig`，將要客製化的設定放入
 - 如果需要測試，可以將 `traefik/whoami.yaml` 加入 k8s
+
+## Services
+
+- 這邊的服務，以及上方的 Traefik，有使用 `HelmChart` 的 CRD，這需要 kubernetes 有支援才可以
+- 我使用 `k3d` 來建置，有支援 `HelmChart`
+- 服務: 
+  - argocd: gitops
+  - drone: automation CI/CD tool
+  - gitea: small git service
+  - nexus: package management system
+  - jenkins: CI/CD tool
+
+## TODO
+
+- 嘗試不使用 docker desktop，(ex: docker-machine or VM)
+- 把不太變動的 files 放入 docker volume 內
