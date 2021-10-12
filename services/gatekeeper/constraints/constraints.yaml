@@ -1,0 +1,13 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sDisallowedNamespaces
+metadata:
+  name: resource-must-not-deployed-in-namespace-default
+spec:
+  enforcementAction: dryrun
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod", "Deployment", "PersistenceVolumeClaim"]
+  parameters:
+    namspaces: ["default"]
+  scope: Cluster

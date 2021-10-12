@@ -1,0 +1,31 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8sdisallowednamespaces
+  annotations:
+    description: Reqiured resources not deployed in specified namspaces
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sDisallowedNamespaces
+      validation:
+        openAPIV3Schema:
+          type: object
+          properties:
+            namespaces:
+              type: array
+              items:
+                type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8sdisallowednamspaces
+        violation[{"msg": msg}] {
+          namespace := input.review.object.metadata.namespace
+          disallowed_namespaces := input.parameters.namespaces[_]
+          contains(disallowed_namespaces, namespace)
+          kind := input.review.object.kind
+          name := input.review.object.metadata.name
+          msg := sprintf("kind: %v name: %v is disallowed to deploy in namespace %v", [kind, name, namespace])
+        }
