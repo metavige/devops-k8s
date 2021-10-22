@@ -7,8 +7,10 @@
   - 透過 `/etc/resolver` 來重導 FQDN 到 k3d 去
     - 增加 `/etc/resolver/k8s.internal` 檔案，內容為 `nameserver 127.0.0.1`
     - 使用 `dnsmasq`，增加 `address=/k8s.internal/127.0.0.1`
+    - 如果非使用 `docker desktop`，IP 自行更換成 docker engine 所在位置。
   - 重啟 `dnsmasq` 服務
-  - 僅適用於 docker desktop
+
+> 單純為了本機測試使用，部分服務帳號密碼，直接設定方便使用。
 
 ## k3d
 
@@ -38,11 +40,14 @@ $ k3d cluster create -c k3d-devops.yaml
 - 這邊的服務，以及上方的 Traefik，有使用 `HelmChart` 的 CRD，這需要 kubernetes 有支援才可以
 - 我使用 `k3d` 來建置，有支援 `HelmChart`
 - 服務: 
-  - argocd: gitops
-  - drone: automation CI/CD tool
-  - gitea: small git service
-  - nexus: package management system
-  - jenkins: CI/CD tool
+  - [argocd](https://argoproj.github.io/cd/): gitops
+  - [drone](https://www.drone.io/): automation CI/CD tool
+  - [gitea](https://gitea.io/): small git service
+  - [Nexus OSS](https://www.sonatype.com/products/repository-oss): package management system
+  - [Jenkins](https://www.jenkins.io/): CI/CD tool
+  - [Harbor](https://goharbor.io/): Docker image repository
+  - [OPA gatekeeper](https://github.com/open-policy-agent/gatekeeper): Open Policy Agent for kubernetes
+
 
 ## TODO
 
