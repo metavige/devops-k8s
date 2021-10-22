@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: harbor
+spec: {}
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: harbor
+  namespace: harbor
+  labels:
+    app: harbor
+spec:
+  repo: https://helm.goharbor.io
+  chart: harbor
+  valuesContent: |-
+    expose:
+      tls:
+        certSource: none
+      ingress:
+        hosts:
+          core: harbor.k8s.internal
+          notary: harbor-notary.k8s.internal
+    externalURL: https://harbor.k8s.internal
+# ---
+# apiVersion: traefik.containo.us/v1alpha1
+# kind: IngressRoute
+# metadata:
+#   name: harbor
+#   labels:
+#     app: harbor
+# spec:
+#   entryPoints:
+#     - websecure
+#   routes:
+#     - kind: Rule
+#       match: Host(`harbor.k8s.internal`)
+#       services:
+#         - name: harbor-portal
+#           port: 3000
