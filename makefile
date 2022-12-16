@@ -19,3 +19,6 @@ traefik:
 	cd base/traefik && \
 	kubectl apply -k config -n kube-system && \
 	cd ${OLDPWD}
+
+whoami:
+	kubectl apply -f base/traefik/manifests/whoami.yaml

@@ -1,5 +1,5 @@
 ---
-apiVersion: k3d.io/v1alpha2
+apiVersion: k3d.io/v1alpha4
 kind: Simple
 name: devops
 servers: 1
@@ -11,10 +11,10 @@ ports:
   - port: 443:443 # same as `--port '443:443@loadbalancer'`
     nodeFilters:
       - loadbalancer
-registries: # define how registries should be created or used
-  create: false # creates a default registry to be used with the cluster; same as `--registry-create`
-  config: registry-config.yaml
+# registries: # define how registries should be created or used
+#   create: false # creates a default registry to be used with the cluster; same as `--registry-create`
+#   config: registry-config.yaml
 volumes:
   - volume: ${K3S_MANIFESTS_DIR}:/var/lib/rancher/k3s/server/manifests
     nodeFilters:
-      - server[0]
+      - server:0

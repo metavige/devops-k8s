@@ -8,7 +8,7 @@
     - 增加 `/etc/resolver/k8s.internal` 檔案，內容為 `nameserver 127.0.0.1`
     - 使用 `dnsmasq`，增加 `address=/k8s.internal/127.0.0.1`
   - 重啟 `dnsmasq` 服務
-  - 僅適用於 docker desktop
+  - podman 需要使用 `podman machine set --rootful=true`
 
 ## k3d
 
@@ -31,4 +31,4 @@ $ k3d cluster create -c k3d-devops.yaml
 - 先使用 [mkcert](https://github.com/FiloSottile/mkcert) 建立 `*.k8s.internal` 的憑證
 - 將憑證轉換成 `secret` 物件，並且將設定檔放入 `volumes/manifests/` 目錄下
 - 產生 `HelmChartConfig`，將要客製化的設定放入
-- 如果需要測試，可以將 `traefik/whoami.yaml` 加入 k8s
+- 如果需要測試，可以將 `base/traefik/whoami.yaml` 加入 k8s
