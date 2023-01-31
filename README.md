@@ -32,3 +32,8 @@ $ k3d cluster create -c k3d-devops.yaml
 - 將憑證轉換成 `secret` 物件，並且將設定檔放入 `volumes/manifests/` 目錄下
 - 產生 `HelmChartConfig`，將要客製化的設定放入
 - 如果需要測試，可以將 `base/traefik/whoami.yaml` 加入 k8s
+
+## 20230131 更新
+
+- 增加 taskfile 的使用
+- `makefile`, `init.sh` 之後不會再使用

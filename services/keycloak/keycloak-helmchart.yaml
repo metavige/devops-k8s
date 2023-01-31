@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: keycloak
+spec: {}
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: keycloak
+  namespace: keycloak
+  labels:
+    app: keycloak
+spec:
+  repo: https://charts.bitnami.com/bitnami
+  chart: keycloak
+  valuesContent: |-
+    proxyAddressForwarding: true
+    extraEnvVars:
+      - name: KEYCLOAK_LOG_LEVEL
+        value: DEBUG
+      - name: KEYCLOAK_PROXY_ADDRESS_FORWARDING
+        value: "true"
+      - name: KEYCLOAK_FRONTEND_URL
+        value: "https://keycloak.k8s.internal"
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: keycloak
+  namespace: keycloak
+  labels:
+    app: keycloak
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`keycloak.k8s.internal`)
+      services:
+        - name: keycloak
+          port: 80

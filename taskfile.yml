@@ -1,0 +1,81 @@
+version: '3'
+
+dotenv:
+  - .env
+
+env:
+  TRAEFIK_FOLDER: "{{.PWD}}/base/traefik"
+  TRAEFIK_CONF_DIR: "{{.TRAEFIK_FOLDER}}/config"
+  TRAEFIK_MANIFESTS_DIR: "{{.TRAEFIK_FOLDER}}/manifests"
+  K3S_VOLUME_DIR: "{{.PWD}}/volumes"
+  K3S_MANIFESTS_DIR: "{{.K3S_VOLUME_DIR}}/manifests"
+
+tasks:
+  cert:
+    desc: "產生 SSL 憑證 (需要 mkcert)"
+    dir: 'base/traefik/config/certs'
+    cmds:
+      - mkcert "*.k8s.internal"
+      - |
+        kubectl create secret tls traefik-secret \
+          --cert=_wildcard.k8s.internal.pem \
+          --key=_wildcard.k8s.internal-key.pem \
+          -n kube-system \
+          --dry-run=client -o yaml > ${K3S_MANIFESTS_DIR}/traefik-secret.yaml
+    precondition:
+      - "[ ! -f _wildcard.k8s.internal-key.pem ]"
+
+  traefik:
+    desc: "建置 traefik"
+    dir: 'base/traefik'
+    deps:
+      - cert
+    cmds:
+      - kubectl apply -k config -n kube-system
+
+  cleanup-manifests:
+    cmds:
+      - echo "$K3S_VOLUME_DIR"
+      - test -d ${K3S_MANIFESTS_DIR} && rm -rf ${K3S_MANIFESTS_DIR}
+      - mkdir -p ${K3S_MANIFESTS_DIR}
+      - cp -f ${TRAEFIK_MANIFESTS_DIR}/*.yaml ${K3S_MANIFESTS_DIR}
+
+  init:
+    desc: "k3d 初始化"
+    deps:
+      - cleanup-manifests
+    cmds:
+      - mkdir -p "${K3S_VOLUME_DIR}/storages"
+      - |
+        k3d cluster create ${CLUSTER_NAME} \
+          -p 80:80@loadbalancer \
+          -p 443:443@loadbalancer \
+          --network ${K3D_NETWORK} \
+          --agents ${AGENT_NODES} \
+          --volume "${K3S_MANIFESTS_DIR}:/var/lib/rancher/k3s/server/manifests@server:0"
+      # - task: traefik
+
+  destroy:
+    desc: "刪除 k3d"
+    cmds:
+      - k3d cluster delete ${CLUSTER_NAME}
+
+  start:
+    desc: "啟動 k3d - ${CLUSTER_NAME}"
+    # deps:
+    #   - traefik
+    cmds:
+      # - task: init
+      - k3d cluster start ${CLUSTER_NAME}
+      # - task: traefik
+
+  stop:
+    desc: "停止 k3d - ${CLUSTER_NAME}"
+    cmds:
+      - k3d cluster stop ${CLUSTER_NAME}
+
+  restart:
+    desc: "重新啟動 k3d - ${CLUSTER_NAME}"
+    cmds:
+      - task: stop
+      - task: start
