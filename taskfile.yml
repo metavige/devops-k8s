@@ -1,7 +1,7 @@
 version: '3'
 
 dotenv:
-  - .env
+- .env
 
 env:
   TRAEFIK_FOLDER: "{{.PWD}}/base/traefik"
@@ -15,67 +15,69 @@ tasks:
     desc: "產生 SSL 憑證 (需要 mkcert)"
     dir: 'base/traefik/config/certs'
     cmds:
-      - mkcert "*.k8s.internal"
-      - |
-        kubectl create secret tls traefik-secret \
-          --cert=_wildcard.k8s.internal.pem \
-          --key=_wildcard.k8s.internal-key.pem \
-          -n kube-system \
-          --dry-run=client -o yaml > ${K3S_MANIFESTS_DIR}/traefik-secret.yaml
+    - mkcert -install
+    - mkcert "*.k8s.internal"
+    - |
+      kubectl create secret tls traefik-secret \
+        --cert=_wildcard.k8s.internal.pem \
+        --key=_wildcard.k8s.internal-key.pem \
+        -n kube-system \
+        --dry-run=client -o yaml > ${TRAEFIK_MANIFESTS_DIR}/traefik-secret.yaml
     precondition:
-      - "[ ! -f _wildcard.k8s.internal-key.pem ]"
+    - "[ ! -f _wildcard.k8s.internal-key.pem ]"
 
-  traefik:
+  traefik-install:
     desc: "建置 traefik"
     dir: 'base/traefik'
     deps:
-      - cert
+    - cert
     cmds:
-      - kubectl apply -k config -n kube-system
+    # - helm install --namespace=kube-system --values=./traefik-values.yaml traefik traefik/traefik
+    - kubectl apply -k . -n kube-system
 
   cleanup-manifests:
     cmds:
-      - echo "$K3S_VOLUME_DIR"
-      - test -d ${K3S_MANIFESTS_DIR} && rm -rf ${K3S_MANIFESTS_DIR}
-      - mkdir -p ${K3S_MANIFESTS_DIR}
-      - cp -f ${TRAEFIK_MANIFESTS_DIR}/*.yaml ${K3S_MANIFESTS_DIR}
+    - echo "$K3S_VOLUME_DIR"
+    - test -d ${K3S_MANIFESTS_DIR} && rm -rf ${K3S_MANIFESTS_DIR}
+    - mkdir -p ${K3S_MANIFESTS_DIR}
+    - cp -f ${TRAEFIK_MANIFESTS_DIR}/*.yaml ${K3S_MANIFESTS_DIR}
 
   init:
     desc: "k3d 初始化"
     deps:
-      - cleanup-manifests
+    - cleanup-manifests
     cmds:
-      - mkdir -p "${K3S_VOLUME_DIR}/storages"
-      - |
-        k3d cluster create ${CLUSTER_NAME} \
-          -p 80:80@loadbalancer \
-          -p 443:443@loadbalancer \
-          --network ${K3D_NETWORK} \
-          --agents ${AGENT_NODES} \
-          --volume "${K3S_MANIFESTS_DIR}:/var/lib/rancher/k3s/server/manifests@server:0"
-      # - task: traefik
+    - mkdir -p "${K3S_VOLUME_DIR}/storages"
+    - |
+      k3d cluster create ${CLUSTER_NAME} \
+        -p 80:80@loadbalancer \
+        -p 443:443@loadbalancer \
+        --network ${K3D_NETWORK} \
+        --agents ${AGENT_NODES} \
+        --volume "${K3S_MANIFESTS_DIR}:/var/lib/rancher/k3s/server/manifests@server:0"
+    # - task: traefik
 
   destroy:
     desc: "刪除 k3d"
     cmds:
-      - k3d cluster delete ${CLUSTER_NAME}
+    - k3d cluster delete ${CLUSTER_NAME}
 
   start:
     desc: "啟動 k3d - ${CLUSTER_NAME}"
     # deps:
     #   - traefik
     cmds:
-      # - task: init
-      - k3d cluster start ${CLUSTER_NAME}
-      # - task: traefik
+    # - task: init
+    - k3d cluster start ${CLUSTER_NAME}
+    # - task: traefik
 
   stop:
     desc: "停止 k3d - ${CLUSTER_NAME}"
     cmds:
-      - k3d cluster stop ${CLUSTER_NAME}
+    - k3d cluster stop ${CLUSTER_NAME}
 
   restart:
     desc: "重新啟動 k3d - ${CLUSTER_NAME}"
     cmds:
-      - task: stop
-      - task: start
+    - task: stop
+    - task: start
