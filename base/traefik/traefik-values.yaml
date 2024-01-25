@@ -1,0 +1,14 @@
+additionalArguments:
+- '--entrypoints.websecure.http.tls=true'
+providers:
+  kubernetesIngress:
+    publishedService:
+      enabled: true
+# volumes:
+# - name: traefik-secret
+#   mountPath: '/certs'
+#   type: secret
+tlsStore:
+  default:
+    defaultCertificate:
+      secretName: traefik-secret
